@@ -1,4 +1,4 @@
-class toDo {
+class Todo {
   constructor(data, selector) {
     this._data = data;
     this.templateElement = document.querySelector(selector);
@@ -47,4 +47,4 @@ class toDo {
   }
 }
 
-export default toDo;
+export default Todo;
