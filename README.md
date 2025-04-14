@@ -1,17 +1,15 @@
 # Simple Todo App
 
-Give a brief description of the project here. Feel free to give it a different name.
+This todo app is a simple and efficient app to help orginize your Todo list!
 
 ## Functionality
 
-Give a more detailed explanation of the project and its functionality.
+Give your todo items the originization they deserve. Check off your items as you complete them, delete the item if you desire and set a due date if needed.
 
 ## Technology
 
-Give a description of the technologies and techniques used. Pictures, GIFs, or screenshots that detail the project features are recommended.
+This todo app features a combination of html, css and scripts to create the dynamic effects.
 
-## Deployment
+html was utilzied to create the basic templates and popups.
 
-This project is deployed on GitHub Pages:
-
-- ADD LINK HERE
+css was utilized to style and configure.
