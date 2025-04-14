@@ -8,7 +8,7 @@ class Todo {
     this._todoLabel = this._todoElement.querySelector(".todo__label");
     this._todoCheckboxEl.checked = this._data.completed;
     this._todoCheckboxEl.id = `todo-${this._data.id}`;
-    this._todoLabel.setAttribute("for", `todo-${this.data.id}`);
+    this._todoLabel.setAttribute("for", `todo-${this._data.id}`); // Fixed this line
   }
   _setEventListeners() {
     this._todoDeleteBtn.addEventListener("click", () => {
@@ -37,6 +37,7 @@ class Todo {
     this._todoDate = this._todoElement.querySelector(".todo__date");
     this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
 
+    this._todoNameEl = todoNameEl; // Fix: Assign todoNameEl to this._todoNameEl
     this._todoNameEl.textContent = this._data.name;
 
     this._generateCheckboxEl();
