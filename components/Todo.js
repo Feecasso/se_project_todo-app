@@ -25,7 +25,7 @@ class Todo {
       this._todoCheckboxElement.addEventListener("change", () => {
         this._data.completed = !this._data.completed;
         this._handleCheck(this._data.completed); // Handle the updated completion state
-        console.log(this._data.completed); // Log the updated state
+        console.log(this._data.completed); // Log completion state
       });
     } else {
       console.error("Checkbox element not found!");
@@ -35,7 +35,7 @@ class Todo {
     if (this.deleteButtonElement) {
       this.deleteButtonElement.addEventListener("click", () => {
         this._handleDelete(this._data.completed);
-        this._deleteTodo(); // Remove the todo element from the DOM
+        this._deleteTodo(); // Remove the todo item from the DOM
       });
     } else {
       console.error("Delete button element not found!");
@@ -58,7 +58,7 @@ class Todo {
   remove = () => {
     if (this._todoElement) {
       this._todoElement.remove();
-      // Clear the reference to the element
+      // Help garbage collection
       this._todoElement = null;
     }
   };
@@ -80,7 +80,7 @@ class Todo {
         )}`;
       }
     } else {
-      this._dateElement.textContent = ""; // Clear the date if invalid
+      this._dateElement.textContent = ""; // Clear the date field if no date is provided
     }
   }
 
@@ -100,8 +100,7 @@ class Todo {
     );
 
     todoNameElement.textContent = this._data.name;
-    todoDate.textContent = this._data.date; // Set the date text content
-    this._todoElement.id = this._selector; // Set the ID of the todo element
+    todoDate.textContent = this._data.date; // Assuming you have a date in your data
 
     this._generateCheckboxElement();
     this._generateDateElement();
