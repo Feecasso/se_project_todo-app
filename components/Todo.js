@@ -1,48 +1,111 @@
 class Todo {
-  constructor(data, selector) {
+  constructor(data, selector, handleCheck, handleDelete) {
     this._data = data;
-    this.templateElement = document.querySelector(selector);
+    this._templateElement = document.querySelector(selector); // Store the template element reference
+    this._date = data.date;
+    this._selector = selector.id;
+    this._handleCheck = handleCheck;
+    this._handleDelete = handleDelete;
   }
-  _generateCheckboxEl() {
-    this._todoCheckboxEl = this._todoElement.querySelector(".todo__completed");
-    this._todoLabel = this._todoElement.querySelector(".todo__label");
-    this._todoCheckboxEl.checked = this._data.completed;
-    this._todoCheckboxEl.id = `todo-${this._data.id}`;
-    this._todoLabel.setAttribute("for", `todo-${this._data.id}`); // Fixed this line
+
+  _getTemplate() {
+    return (this._template = this._templateElement.content
+      .querySelector(".todo")
+      .cloneNode(true));
   }
+
+  _deleteTodo = () => {
+    this._todoElement.remove();
+    this._todoElement = null;
+  };
+
   _setEventListeners() {
-    this._todoDeleteBtn.addEventListener("click", () => {
-      this._todoElement.remove();
-    });
-    this._todoCheckboxEl.addEventListener("click", () => {
-      this._data.completed = !this._data.completed;
-    });
+    // Set up checkbox change handler to toggle completion status
+    if (this._todoCheckboxElement) {
+      this._todoCheckboxElement.addEventListener("change", () => {
+        this._data.completed = !this._data.completed;
+        this._handleCheck(this._data.completed); // Handle the updated completion state
+        console.log(this._data.completed); // Log the updated state
+      });
+    } else {
+      console.error("Checkbox element not found!");
+    }
+
+    // Set up delete button handler
+    if (this.deleteButtonElement) {
+      this.deleteButtonElement.addEventListener("click", () => {
+        this._handleDelete(this._data.completed);
+        this._deleteTodo(); // Remove the todo element from the DOM
+      });
+    } else {
+      console.error("Delete button element not found!");
+    }
   }
-  _setDueDate() {
-    const dueDate = new Date(this._data.date);
+
+  _generateCheckboxElement() {
+    this._todoCheckboxElement =
+      this._todoElement.querySelector(".todo__completed");
+    this._todoLabel = this._todoElement.querySelector(".todo__label");
+    this._todoCheckboxElement.checked = this._data.completed;
+    this._todoCheckboxElement.id = `todo-${this._data.id}`;
+    this._todoLabel.setAttribute("for", `todo-${this._data.id}`);
+  }
+
+  toggleCompleted = () => {
+    this._completed = !this._completed;
+  };
+
+  remove = () => {
+    if (this._todoElement) {
+      this._todoElement.remove();
+      // Clear the reference to the element
+      this._todoElement = null;
+    }
+  };
+
+  _generateDateElement() {
+    this._dateElement = this._todoElement.querySelector(".todo__date");
+    const dueDate = new Date(this._date);
+
     if (!isNaN(dueDate)) {
-      this._todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })}`;
+      const dueDate = new Date(this._date);
+      if (!isNaN(dueDate)) {
+        this._dateElement.textContent = `Due: ${dueDate.toLocaleString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        )}`;
+      }
+    } else {
+      this._dateElement.textContent = ""; // Clear the date if invalid
     }
   }
 
   getView() {
-    this._todoElement = this.templateElement.content
-      .querySelector(".todo")
-      .cloneNode(true);
-    const todoNameEl = this._todoElement.querySelector(".todo__name");
-    this._todoDate = this._todoElement.querySelector(".todo__date");
-    this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
+    this._todoElement = this._getTemplate(); // Get the template and clone it
+    if (!this._todoElement) {
+      console.error("failed to create todo element");
+      return null;
+    }
+    const todoNameElement = this._todoElement.querySelector(".todo__name");
+    const todoDate = this._todoElement.querySelector(".todo__date");
 
-    this._todoNameEl = todoNameEl; // Fix: Assign todoNameEl to this._todoNameEl
-    this._todoNameEl.textContent = this._data.name;
+    // Select elements within the cloned content
 
-    this._generateCheckboxEl();
+    this.deleteButtonElement = this._todoElement.querySelector(
+      ".todo__delete-button"
+    );
+
+    todoNameElement.textContent = this._data.name;
+    todoDate.textContent = this._data.date; // Set the date text content
+    this._todoElement.id = this._selector; // Set the ID of the todo element
+
+    this._generateCheckboxElement();
+    this._generateDateElement();
     this._setEventListeners();
-    this._setDueDate();
 
     return this._todoElement;
   }
